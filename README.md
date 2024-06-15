@@ -1,4 +1,5 @@
 ### WireGuard 管理脚本
+[ENGLISH VERSION](./README_EN.md)
 
 本脚本用于管理 WireGuard 隧道，包括安装 WireGuard、展示当前隧道信息、创建新隧道以及生成并打印公私钥。
 

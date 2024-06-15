@@ -135,33 +135,51 @@ generate_and_print_keys() {
 }
 
 # 主菜单
+clear_screen() {
+    printf "\033c"
+}
+
+# 函数：居中输出文本
+center_text() {
+    local text="$1"
+    local term_width=$(tput cols)
+    local padding=$(( ($term_width - ${#text}) / 2 ))
+    printf "%*s%s\n" $padding "" "$text"
+}
+
 while true; do
-  echo "请选择一个选项："
-  echo "1) 检查并安装 WireGuard"
-  echo "2) 展示所有隧道信息"
-  echo "3) 创建新隧道"
-  echo "4) 生成并打印公私钥"
-  echo "5) 退出脚本"
-  read -p "请输入对应的数字: " choice
-  case $choice in
-    1)
-      check_and_install_wireguard
-      ;;
-    2)
-      show_tunnels
-      ;;
-    3)
-      create_tunnel
-      ;;
-    4)
-      generate_and_print_keys
-      ;;
-    5)
-      echo "退出脚本。"
-      exit 0
-      ;;
-    *)
-      echo "无效的选项，请重新选择。"
-      ;;
-  esac
+    clear_screen
+    center_text "\033[1;33m=== 欢迎使用WireGuard管理脚本 ===\033[0m"
+    echo -e "\033[0;34mversion: v1.0\033[0m"
+    echo -e "\033[0;34mrepo link: https://github.com/sam13142023/Wireguard-shell\033[0m"
+    echo ""
+    echo "请选择你所需的功能:"
+    echo "1) 检查并安装 WireGuard"
+    echo "2) 展示所有隧道信息"
+    echo "3) 创建新隧道"
+    echo "4) 生成并打印公私钥"
+    echo "5) 退出脚本"
+    read -p "请输入对应的数字: " choice
+    case $choice in
+        1)
+            check_and_install_wireguard
+            ;;
+        2)
+            show_tunnels
+            ;;
+        3)
+            create_tunnel
+            ;;
+        4)
+            generate_and_print_keys
+            ;;
+        5)
+            echo "退出脚本。"
+            exit 0
+            ;;
+        *)
+            echo "无效的选项，请重新选择。"
+            ;;
+    esac
+    read -p "按 Enter 继续..."
 done

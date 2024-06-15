@@ -165,7 +165,7 @@ update() {
   local current_version=$(grep "version: v" wireguard.sh | awk '{print $2}')
   local new_version=$(grep "version: v" wireguard.sh.tmp | awk '{print $2}')
 
-  if [[ $(echo "$current_version < $new_version" | bc) -eq 1 ]]; then
+  if [[ "$current_version" < "$new_version" ]]; then 
     # 版本不同，更新脚本
     mv wireguard.sh.tmp wireguard.sh
     echo "脚本已更新！/ Upgrade Successfully"

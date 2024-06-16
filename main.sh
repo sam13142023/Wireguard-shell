@@ -200,7 +200,7 @@ generate_and_print_keys() {
 while true; do
     clear_screen
     center_text "=== 欢迎使用WireGuard管理脚本 / Welcome to the WireGuard Management Script ==="
-    echo -e "\033[0;34mversion: v1.1.1 \033[0m"
+    echo -e "\033[0;34mversion: v1.1.2 \033[0m"
     echo -e "\033[0;34mrepo link: https://github.com/sam13142023/Wireguard-shell \033[0m"
     echo "1) 检查并安装 WireGuard / Check and install WireGuard"
     echo "2) 展示所有隧道信息 / Show all tunnels information"

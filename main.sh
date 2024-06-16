@@ -10,10 +10,26 @@ fi
 check_and_install_wireguard() {
   if ! command -v wg &> /dev/null; then
     echo "未检测到 WireGuard，正在安装... / WireGuard not detected, installing..."
-    apt update && apt install -y wireguard
-    echo "WireGuard 安装完成。 / WireGuard installed."
+     #自动检测操作系统，并根据不同的操作系统进行不同的安装操作
+    if [ -f /etc/debian_version ]; then
+      apt-get update
+      apt-get install -y wireguard
+    elif [ -f /etc/redhat-release ]; then
+      yum install -y epel-release
+      yum install -y wireguard-tools
+    else
+      echo "无法识别的操作系统。 / Unrecognized operating system."
+      exit 1
+    fi
+
+    if ! command -v wg &> /dev/null; then
+      echo "WireGuard安装失败。请检查日志以解决问题。 / WireGuard installation failed. Please check the logs to resolve the issue."
+      exit 1
+    else
+      echo "WireGuard已成功安装。 / WireGuard has been successfully installed."
+    fi
   else
-    echo "WireGuard 已安装。 / WireGuard already installed."
+    echo "检测到已安装的 WireGuard。 / Detected already installed WireGuard."
   fi
 }
 

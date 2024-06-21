@@ -8,30 +8,28 @@ fi
 
 # 检查并安装 WireGuard
 check_and_install_wireguard() {
-  if ! command -v wg &> /dev/null; then
-    echo "未检测到 WireGuard，正在安装... / WireGuard not detected, installing..."
-     #自动检测操作系统，并根据不同的操作系统进行不同的安装操作
-    if [ -f /etc/debian_version ]; then
-      apt-get update
-      apt-get install -y wireguard
-    elif [ -f /etc/redhat-release ]; then
-      yum install -y epel-release
-      yum install -y wireguard-tools
-    else
-      echo "无法识别的操作系统。 / Unrecognized operating system."
-      exit 1
-    fi
-
-    if ! command -v wg &> /dev/null; then
-      echo "WireGuard安装失败。请检查日志以解决问题。 / WireGuard installation failed. Please check the logs to resolve the issue."
-      exit 1
-    else
-      echo "WireGuard已成功安装。 / WireGuard has been successfully installed."
-    fi
-  else
-    echo "检测到已安装的 WireGuard。 / Detected already installed WireGuard."
+  # 检测虚拟化架构,如果为LXC则提示架构不支持
+  if [ "$(systemd-detect-virt)" = "lxc" ]; then
+    echo "LXC 架构不支持 WireGuard。 / LXC architecture does not support WireGuard."
+    return 1
   fi
-}
+  # 自动检测操作系统，并根据不同的操作系统进行不同的安装操作
+  if ! command -v wg &> /dev/null; then
+    if [ -f /etc/debian_version ]; then
+      sudo apt update
+      sudo apt install -y wireguard
+    elif [ -f /etc/redhat-release ]; then
+      sudo yum install -y epel-release
+      sudo yum install -y wireguard-tools
+    elif [ -f /etc/arch-release ]; then
+      sudo pacman -Syu --noconfirm wireguard-tools
+    else
+      echo "不支持的操作系统。 / Unsupported operating system."
+      return 1
+    fi
+    echo "WireGuard 安装完成。 / WireGuard installation completed."
+  else
+    echo "检测到已安装的 WireGuard。 / Detected already installed WireGuard"
 
 # 展示所有隧道信息
 show_tunnels() {

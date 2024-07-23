@@ -30,6 +30,8 @@ check_and_install_wireguard() {
     echo "WireGuard 安装完成。 / WireGuard installation completed."
   else
     echo "检测到已安装的 WireGuard。 / Detected already installed WireGuard"
+  fi
+}
 
 # 展示所有隧道信息
 show_tunnels() {
@@ -104,8 +106,8 @@ create_tunnel() {
         return 1
       fi
       # 启用并启动 WireGuard 配置
-      systemctl enable "${config_file}@wg-quick"
-      systemctl start "${config_file}@wg-quick"
+      systemctl enable "wg-quick@${config_file}"
+      systemctl start "wg-quick@${config_file}"
       echo "WireGuard 隧道已启动 / WireGuard tunnel started"
 
       break
@@ -153,7 +155,6 @@ create_tunnel() {
   done
 }
 
-
 clear_screen() {
     printf "\033c"
 }
@@ -165,6 +166,7 @@ center_text() {
     local padding=$(( ($term_width - ${#text}) / 2 ))
     printf "%*s%s\n" $padding "" "$text"
 }
+
 update() {
   # 获取最新版本脚本
   curl -L https://github.com/sam13142023/Wireguard-shell/raw/main/main.sh -o wireguard.sh.tmp
@@ -188,12 +190,14 @@ update() {
     rm wireguard.sh.tmp
   fi
 }
+
 generate_and_print_keys() {
   private_key=$(wg genkey)
   public_key=$(echo "$private_key" | wg pubkey)
   echo "生成的私钥: $private_key"
   echo "生成的公钥: $public_key"
 }
+
 # 主菜单
 while true; do
     clear_screen

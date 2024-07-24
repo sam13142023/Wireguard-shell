@@ -188,6 +188,7 @@ update() {
     rm wireguard.sh.tmp
   fi
 }
+#生成WireGuard密钥对
 generate_and_print_keys() {
   private_key=$(wg genkey)
   public_key=$(echo "$private_key" | wg pubkey)
